@@ -8,14 +8,8 @@ let g:writemode = 1
 let OUTPUTDIR = "~/Dropbox/Skrivande/_kompilerat/"
 let CSS = "~/dev/compile-story/style/manuscript.css"
 let DOCXREF = "~/dev/compile-story/style/reference.docx"
-setlocal backupdir=./_backup/,../_backup/,/Users/markus/Dropbox/_text/arkiv/_backup/,.
 
-" First, set backup files to timestamp suffix
-let bupext = strftime("%Y%m%d-%H%M")
-let bupext = "setlocal backupext=_". bupext
-execute bupext
 setlocal nonumber
-setlocal backup
 setlocal linespace=5           " Make lines a little airier
 setlocal autowrite             " Save files when switching buffers etc
 
@@ -28,7 +22,6 @@ if has("gui_running")
     setlocal columns=120
     setlocal lines=40
 endif
-lcd ~/Dropbox/_text        " Start in _text folder
 
 " Compile functions
 command! MakePDF call MakePDFFunction()
