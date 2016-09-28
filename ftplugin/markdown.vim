@@ -90,9 +90,13 @@ function! MakePDFFunction()
 endfunction
 
 function! BackupDocumentToMailFunction()
-    let TIMESTAMP = strftime("%Y-%m-%d %H:%M:%S")
-    let mailcommand = "!uuencode ".expand('%:p')." ".expand('%:t')." | mail -s \"[textbackup] ".expand('%:t:r')." ".TIMESTAMP."\" mskold@gmail.com"
-    execute mailcommand
+    if exists("g:writemode_backup_emailaddress")
+        let TIMESTAMP = strftime("%Y-%m-%d %H:%M:%S")
+        let mailcommand = "!uuencode ".expand('%:p')." ".expand('%:t')." | mail -s \"[textbackup] ".expand('%:t:r')." ".TIMESTAMP."\" ".g:writemode_backup_emailaddress
+        execute mailcommand
+    else
+        echo "No backup email address specified."
+    endif
 endfun
 
 function! s:RenumberChaptersFunction()

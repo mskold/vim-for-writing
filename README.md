@@ -31,6 +31,11 @@ let g:writemode_cssref = "<path to your custom css-file>"
 let g:writemode_docxref = "<path to your reference docx file>"
 ```
 
+To enable the :MailBackup commmand, you must specify an email address to be used.
+```
+let g:writemode_backup_emailaddress = "<the email address you want your document to be emailed to>"
+```
+
 ## Commands
 
     :MakeEpub
