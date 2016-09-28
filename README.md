@@ -22,13 +22,13 @@ Folded, the above chapter whould like something like this:
 
 ## Configuration
 
-You will probably want to change some variables used for generating PDF, Word and Epub. The output directory and reference documents are configurable in ftplugin/markdown.vim
+You will probably want to change some variables used for generating PDF, Word and Epub, such as output directory, CSS stylesheet (for EPUB and PDF) and reference document for DOCX.
 
+Add this configuration to your .vimrc
 ```
-" Global variables used by compile functions (you may want to change these)
-let OUTPUTDIR = "~/Dropbox/Skrivande/_kompilerat/"
-let CSS = "~/dev/compile-story/style/manuscript.css"
-let DOCXREF = "~/dev/compile-story/style/reference.docx"
+let g:writemode_outputdir = "<path to your desired output location>"
+let g:writemode_cssref = "<path to your custom css-file>"
+let g:writemode_docxref = "<path to your reference docx file>"
 ```
 
 ## Commands

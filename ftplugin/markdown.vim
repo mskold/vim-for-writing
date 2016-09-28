@@ -4,10 +4,7 @@ if exists("g:writemode")
 endif
 let g:writemode = 1
 
-" Global variables used by compile functions (you may want to change these)
-let OUTPUTDIR = "~/Dropbox/Skrivande/_kompilerat/"
-let CSS = "~/dev/compile-story/style/manuscript.css"
-let DOCXREF = "~/dev/compile-story/style/reference.docx"
+let g:writemode_outputdir = get(g:, 'writemode_outputdir', "~/")
 
 setlocal nonumber
 setlocal linespace=5           " Make lines a little airier
@@ -41,20 +38,32 @@ endfun
 
 function! MakeEpubFunction()
     let filename = CopyFile()
-    let pandoccmd = "!pandoc -V lang=sw -t epub --epub-stylesheet=".expand(g:CSS)." --epub-chapter-level=3 -o ".g:OUTPUTDIR.expand('%:t:r').".epub ".expand(filename)
+    if exists("g:writemode_cssref")
+        echo "Using CSS reference ".g:writemode_cssref
+        let pandoccmd = "!pandoc -V lang=sw -t epub --epub-stylesheet=".expand(g:writemode_cssref)." --epub-chapter-level=3 -o ".g:writemode_outputdir.expand('%:t:r').".epub ".expand(filename)
+    else
+        echo "No CSS reference file specified."
+        let pandoccmd = "!pandoc -V lang=sw -t epub --epub-chapter-level=3 -o ".g:writemode_outputdir.expand('%:t:r').".epub ".expand(filename)
+    endif
     execute pandoccmd
     if has("mac")
-        let opencmd = "!open ".g:OUTPUTDIR
+        let opencmd = "!open ".g:writemode_outputdir
         execute opencmd
     endif
 endfun
 
 function! MakeWordDocFunction()
     let filename = CopyFile()
-    let pandoccmd = "!pandoc -V lang=sw -t docx --reference-docx ".g:DOCXREF." -o ".g:OUTPUTDIR.expand('%:t:r').".docx ".expand(filename)
+    if exists("g:writemode_docxref")
+        echo "Using docx reference ".g:writemode_docxref
+        let pandoccmd = "!pandoc -V lang=sw -t docx --reference-docx ".g:writemode_docxref." -o ".g:writemode_outputdir.expand('%:t:r').".docx ".expand(filename)
+    else
+        echo "No docx reference file specified."
+        let pandoccmd = "!pandoc -V lang=sw -t docx -o ".g:writemode_outputdir.expand('%:t:r').".docx ".expand(filename)
+    endif
     execute pandoccmd
     if has("mac")
-        let opencmd = "!open ".g:OUTPUTDIR
+        let opencmd = "!open ".g:writemode_outputdir
         execute opencmd
     endif
 endfun
@@ -63,13 +72,19 @@ function! MakePDFFunction()
     let filename = CopyFile()
     let tmpfile = tempname() . '.html'
 
-    let pandoccmd = "!pandoc -V lang=sw -s -t html -c ".g:CSS." -o ".tmpfile." ".expand(filename)
+    if exists("g:writemode_cssref")
+        echo "Using CSS reference ".g:writemode_cssref
+        let pandoccmd = "!pandoc -V lang=sw -s -t html -c ".g:writemode_cssref." -o ".tmpfile." ".expand(filename)
+    else
+        echo "No CSS reference file specified."
+        let pandoccmd = "!pandoc -V lang=sw -s -t html -o ".tmpfile." ".expand(filename)
+    endif
     execute pandoccmd
 
-    let wkhtmlcmd = "!wkhtmltopdf --margin-top 20 --margin-bottom 20 --margin-right 30 --margin-left 30 --page-size A4 --encoding utf-8 --footer-font-name \"Times New Roman\" --footer-spacing 10 --header-font-name \"Times New Roman\" --header-font-size 9 --header-spacing 10 --header-right \"".expand('%:t:r')." / Markus Sköld\" --footer-center \"[page]\" ".tmpfile." ".g:OUTPUTDIR.expand('%:t:r').".pdf"
+    let wkhtmlcmd = "!wkhtmltopdf --margin-top 20 --margin-bottom 20 --margin-right 30 --margin-left 30 --page-size A4 --encoding utf-8 --footer-font-name \"Times New Roman\" --footer-spacing 10 --header-font-name \"Times New Roman\" --header-font-size 9 --header-spacing 10 --header-right \"".expand('%:t:r')." / Markus Sköld\" --footer-center \"[page]\" ".tmpfile." ".g:writemode_outputdir.expand('%:t:r').".pdf"
     execute wkhtmlcmd
     if has("mac")
-        let opencmd = "!open ".g:OUTPUTDIR
+        let opencmd = "!open ".g:writemode_outputdir
         execute opencmd
     endif
 endfunction
