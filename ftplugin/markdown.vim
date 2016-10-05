@@ -43,7 +43,7 @@ function! MakeEpubFunction()
         let pandoccmd = "!pandoc -V lang=sw -t epub --epub-stylesheet=".expand(g:writemode_cssref)." --epub-chapter-level=3 -o ".g:writemode_outputdir.expand('%:t:r').".epub ".expand(filename)
     else
         echo "No CSS reference file specified."
-        let pandoccmd = "!pandoc -V lang=sw -t epub --epub-chapter-level=3 -o ".g:writemode_outputdir.expand('%:t:r').".epub ".expand(filename)
+        let pandoccmd = "!pandoc -V lang=sw -t epub --epub-chapter-level=3 -o \"".g:writemode_outputdir.expand('%:t:r').".epub\" ".expand(filename)
     endif
     execute pandoccmd
     if has("mac")
@@ -56,10 +56,10 @@ function! MakeWordDocFunction()
     let filename = CopyFile()
     if exists("g:writemode_docxref")
         echo "Using docx reference ".g:writemode_docxref
-        let pandoccmd = "!pandoc -V lang=sw -t docx --reference-docx ".g:writemode_docxref." -o ".g:writemode_outputdir.expand('%:t:r').".docx ".expand(filename)
+        let pandoccmd = "!pandoc -V lang=sw -t docx --reference-docx ".g:writemode_docxref." -o \"".g:writemode_outputdir.expand('%:t:r').".docx\" ".expand(filename)
     else
         echo "No docx reference file specified."
-        let pandoccmd = "!pandoc -V lang=sw -t docx -o ".g:writemode_outputdir.expand('%:t:r').".docx ".expand(filename)
+        let pandoccmd = "!pandoc -V lang=sw -t docx -o \"".g:writemode_outputdir.expand('%:t:r').".docx\" ".expand(filename)
     endif
     execute pandoccmd
     if has("mac")
@@ -81,7 +81,7 @@ function! MakePDFFunction()
     endif
     execute pandoccmd
 
-    let wkhtmlcmd = "!wkhtmltopdf --margin-top 20 --margin-bottom 20 --margin-right 30 --margin-left 30 --page-size A4 --encoding utf-8 --footer-font-name \"Times New Roman\" --footer-spacing 10 --header-font-name \"Times New Roman\" --header-font-size 9 --header-spacing 10 --header-right \"".expand('%:t:r')." / Markus Sköld\" --footer-center \"[page]\" ".tmpfile." ".g:writemode_outputdir.expand('%:t:r').".pdf"
+    let wkhtmlcmd = "!wkhtmltopdf --margin-top 20 --margin-bottom 20 --margin-right 30 --margin-left 30 --page-size A4 --encoding utf-8 --footer-font-name \"Times New Roman\" --footer-spacing 10 --header-font-name \"Times New Roman\" --header-font-size 9 --header-spacing 10 --header-right \"".expand('%:t:r')." / Markus Sköld\" --footer-center \"[page]\" ".tmpfile." \"".g:writemode_outputdir.expand('%:t:r').".pdf\""
     execute wkhtmlcmd
     if has("mac")
         let opencmd = "!open ".g:writemode_outputdir
@@ -92,7 +92,7 @@ endfunction
 function! BackupDocumentToMailFunction()
     if exists("g:writemode_backup_emailaddress")
         let TIMESTAMP = strftime("%Y-%m-%d %H:%M:%S")
-        let mailcommand = "!uuencode ".expand('%:p')." ".expand('%:t')." | mail -s \"[textbackup] ".expand('%:t:r')." ".TIMESTAMP."\" ".g:writemode_backup_emailaddress
+        let mailcommand = "!uuencode \"".expand('%:p')."\" \"".expand('%:t')."\" | mail -s \"[textbackup] ".expand('%:t:r')." ".TIMESTAMP."\" ".g:writemode_backup_emailaddress
         execute mailcommand
     else
         echo "No backup email address specified."
@@ -113,4 +113,3 @@ function! s:RenumberChaptersFunction()
 endfun
 
 :command! RenumberChapters call s:RenumberChaptersFunction()
-

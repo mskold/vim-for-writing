@@ -54,6 +54,10 @@ Creates a Microsoft Word document from the current markdown file.
 
 Given that chapter headings are shaped like ```### X``` where X is the chapter number, this command renumbers all chapters from the beginnning of the file. Useful if you are moving chapters around.
 
+    :MailBackup
+
+Mail the current file to you specified email address.
+
 ## Requirments
 
 The Make-commands require pandoc (http://pandoc.org/) and wkhtmltopdf (http://wkhtmltopdf.org/).
